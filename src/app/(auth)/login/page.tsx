@@ -1,30 +1,24 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Card, CardContent } from "@/components/ui/card";
+import { LoginForm } from "@/components/auth/login-form";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+	const supabase = await createSupabaseServerClient();
+	const { data } = await supabase.auth.getUser();
+	if (data.user) {
+		redirect("/dashboard");
+	}
+
 	return (
-		<div className="flex min-h-[calc(100dvh-4rem)] items-center justify-center p-6">
-			<Card className="w-full max-w-sm">
-				<CardHeader>
-					<CardTitle className="text-xl">Login</CardTitle>
-					<CardDescription>Melde dich bei deinem Konto an</CardDescription>
-				</CardHeader>
-				<CardContent>
-					<form className="grid gap-4">
-						<div className="grid gap-2">
-							<Label htmlFor="email">E-Mail</Label>
-							<Input id="email" type="email" placeholder="you@example.com" />
-						</div>
-						<div className="grid gap-2">
-							<Label htmlFor="password">Passwort</Label>
-							<Input id="password" type="password" placeholder="••••••••" />
-						</div>
-						<Button type="button" className="w-full">Anmelden</Button>
-					</form>
-				</CardContent>
-			</Card>
+		<div className="min-h-screen bg-slate-950 text-slate-100">
+			<div className="mx-auto flex min-h-screen max-w-6xl items-center justify-center px-4 py-8">
+				<Card className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/80 shadow-lg">
+					<CardContent className="p-8">
+						<LoginForm />
+					</CardContent>
+				</Card>
+			</div>
 		</div>
 	);
 }
