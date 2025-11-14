@@ -5,8 +5,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { Loader2, KeyRound } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { baseUrl } from "@/lib/env";
 import {
 	Form,
 	FormControl,
@@ -18,6 +19,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 const LoginSchema = z.object({
 	email: z.string().email("Bitte gib eine gültige E-Mail ein"),
@@ -53,16 +56,29 @@ export function LoginForm() {
 
 	const isSubmitting = form.formState.isSubmitting;
 
+	async function onForgotPassword() {
+		setGlobalError(null);
+		const email = form.getValues("email");
+		if (!email) {
+			setGlobalError("Bitte zuerst deine E-Mail eingeben.");
+			return;
+		}
+		const redirectTo = `${baseUrl}/reset-password`;
+		const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+		if (error) {
+			setGlobalError("Senden der Reset-E-Mail fehlgeschlagen. Bitte später erneut versuchen.");
+			return;
+		}
+		toast.success("Reset-Link gesendet. Bitte prüfe dein Postfach.");
+	}
+
 	return (
 		<div className="w-full max-w-md">
-			<div className="mb-6 flex flex-col items-center text-center">
-				<div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-full bg-slate-800 ring-1 ring-slate-700">
-					<KeyRound className="h-5 w-5 text-slate-200" />
+			<div className="mb-6 flex flex-col text-left">
+				<div className="mb-1 text-2xl font-semibold tracking-tight text-[#007BFF]">
+					FLX SOFTWARE
 				</div>
-				<h1 className="text-2xl font-semibold tracking-tight">FLX AIM</h1>
-				<p className="mt-1 text-sm text-slate-300">
-					Melde dich mit deinem Firmen-Account an.
-				</p>
+				<p className="text-sm text-[#9BA9C1]">Melde dich mit deinem Firmen-Account an.</p>
 			</div>
 
 			{globalError ? (
@@ -78,17 +94,17 @@ export function LoginForm() {
 						name="email"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>E-Mail</FormLabel>
+								<FormLabel className="text-sm font-medium text-slate-100">E-Mail</FormLabel>
 								<FormControl>
 									<Input
 										type="email"
 										placeholder="name@firma.de"
 										disabled={isSubmitting}
-										className="bg-slate-900 border-slate-700 focus-visible:ring-slate-500"
+										className="bg-slate-900 border-[#1E2635] text-slate-100 placeholder:text-slate-400 focus-visible:ring-[#007BFF] focus-visible:border-[#007BFF]"
 										{...field}
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-xs text-red-400" />
 							</FormItem>
 						)}
 					/>
@@ -97,17 +113,17 @@ export function LoginForm() {
 						name="password"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Passwort</FormLabel>
+								<FormLabel className="text-sm font-medium text-slate-100">Passwort</FormLabel>
 								<FormControl>
 									<Input
 										type="password"
 										placeholder="••••••••"
 										disabled={isSubmitting}
-										className="bg-slate-900 border-slate-700 focus-visible:ring-slate-500"
+										className="bg-slate-900 border-[#1E2635] text-slate-100 placeholder:text-slate-400 focus-visible:ring-[#007BFF] focus-visible:border-[#007BFF]"
 										{...field}
 									/>
 								</FormControl>
-								<FormMessage />
+								<FormMessage className="text-xs text-red-400" />
 							</FormItem>
 						)}
 					/>
@@ -123,14 +139,14 @@ export function LoginForm() {
 										disabled={isSubmitting}
 									/>
 								</FormControl>
-								<FormLabel className="m-0">Eingeloggt bleiben</FormLabel>
+								<FormLabel className="m-0 text-sm text-[#9BA9C1]">Eingeloggt bleiben</FormLabel>
 							</FormItem>
 						)}
 					/>
-					<Button type="submit" className="w-full" disabled={isSubmitting}>
+					<Button type="submit" className="w-full" variant="flxPrimary" disabled={isSubmitting}>
 						{isSubmitting ? (
 							<>
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+								<Loader2 className="mr-2 h-4 w-4 animate-spin text-white" />
 								Anmelden...
 							</>
 						) : (
@@ -138,21 +154,25 @@ export function LoginForm() {
 						)}
 					</Button>
 					<div className="pt-1 text-right">
-						<button
+						<Button
 							type="button"
-							disabled
-							className="cursor-not-allowed text-xs text-slate-400"
-							title="Demnächst verfügbar"
+							variant="ghost"
+							size="sm"
+							className="h-auto px-1 text-xs text-[#007BFF] hover:text-[#00A8FF]"
+							onClick={onForgotPassword}
+							title="Passwort zurücksetzen"
 						>
 							Passwort vergessen?
-						</button>
+						</Button>
 					</div>
 				</form>
 			</Form>
 
-			<p className="mt-6 text-center text-xs text-slate-400">
+			<p className="mt-6 text-center text-xs text-[#9BA9C1]">
 				Probleme beim Login? Wende dich an deinen Administrator.
 			</p>
+
+			<Toaster />
 		</div>
 	);
 }
