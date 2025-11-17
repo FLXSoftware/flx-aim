@@ -31,7 +31,7 @@ export async function inviteEmployeeAction(input: InviteEmployeeInput) {
 
 	// Admin-Check
 	const { data: myRoles } = await supabase
-		.from("user_roles")
+		.from("user_org_roles")
 		.select("role")
 		.eq("user_id", userId)
 		.eq("org_id", orgId);
@@ -73,7 +73,7 @@ export async function inviteEmployeeAction(input: InviteEmployeeInput) {
 
 	// Insert role
 	const { error: roleError } = await admin
-		.from("user_roles")
+		.from("user_org_roles")
 		.insert({
 			org_id: orgId,
 			user_id: invitedUserId,

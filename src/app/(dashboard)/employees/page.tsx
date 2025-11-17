@@ -28,7 +28,7 @@ export default async function EmployeesPage() {
 
 	// Rollen des aktuellen Users
 	const { data: roles } = await supabase
-		.from("user_roles")
+		.from("user_org_roles")
 		.select("role")
 		.eq("user_id", userId)
 		.eq("org_id", orgId);
@@ -43,7 +43,7 @@ export default async function EmployeesPage() {
 
 	// Rollen aller Nutzer in der Org
 	const { data: employeeRoles } = await supabase
-		.from("user_roles")
+		.from("user_org_roles")
 		.select("user_id, role")
 		.eq("org_id", orgId);
 
