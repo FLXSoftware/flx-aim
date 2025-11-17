@@ -29,9 +29,9 @@ export default async function AssetDetailPage({
 
 	return (
 		<div className="flex flex-col gap-4">
-			<Card>
+			<Card className="rounded-xl border border-[#1E2635] bg-[#1A2234] text-[#E6EEF7]">
 				<CardHeader>
-					<CardTitle>Asset: {asset.name}</CardTitle>
+					<CardTitle className="text-[#E6EEF7]">Asset: {asset.name}</CardTitle>
 				</CardHeader>
 				<CardContent className="grid gap-4">
 					<DetailRow label="Inventar-Nr." value={asset.inventory_no} />
@@ -57,8 +57,8 @@ export default async function AssetDetailPage({
 function DetailRow({ label, value }: { label: string; value: string }) {
 	return (
 		<div className="grid grid-cols-3 items-center gap-2">
-			<div className="text-sm text-muted-foreground">{label}</div>
-			<div className="col-span-2">{value}</div>
+			<div className="text-sm text-[#9BA9C1]">{label}</div>
+			<div className="col-span-2 text-[#E6EEF7]">{value}</div>
 		</div>
 	);
 }

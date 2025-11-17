@@ -31,7 +31,7 @@ export function Sidebar() {
 
 	return (
 		<div className="flex h-screen flex-col">
-			<div className="flex items-center gap-2 px-4 py-4 border-b border-[#1E2635]">
+			<div className="flex items-center gap-2 px-4 py-4 border-b border-[#1E2635] text-[#E6EEF7]">
 				<div className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-[#0F172A] border border-[#1E2635]">
 					<Boxes className="h-4 w-4 text-[#00A8FF]" />
 				</div>
@@ -47,8 +47,8 @@ export function Sidebar() {
 								<Link
 									href={item.disabled ? "#" : item.href}
 									className={cn(
-										"flex items-center gap-2 rounded-lg px-3 py-2 text-slate-300 hover:bg-slate-900 hover:text-white",
-										active && "bg-slate-900 text-white border-l-2 border-[#007BFF]",
+										"flex items-center gap-2 rounded-lg px-3 py-2 text-[#E6EEF7] hover:bg-[#1F2937] hover:text-[#E6EEF7]",
+										active && "bg-[#1A2234] text-[#E6EEF7] border-l-2 border-[#007BFF]",
 										item.disabled && "opacity-50 cursor-not-allowed"
 									)}
 									aria-disabled={item.disabled}

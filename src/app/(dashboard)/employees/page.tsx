@@ -14,7 +14,7 @@ export default async function EmployeesPage() {
 	if (!orgId) {
 		return (
 			<div className="space-y-6">
-				<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+				<Card className="rounded-xl border border-[#1E2635] bg-[#1A2234] text-[#E6EEF7]">
 					<CardHeader>
 						<CardTitle className="text-base text-[#E6EEF7]">Mitarbeiter</CardTitle>
 					</CardHeader>
@@ -56,10 +56,10 @@ export default async function EmployeesPage() {
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
-				<h1 className="text-lg font-semibold tracking-tight">Mitarbeiter</h1>
+				<h1 className="text-lg font-semibold tracking-tight text-[#E6EEF7]">Mitarbeiter</h1>
 				{isAdmin ? <InviteEmployeeDialog /> : null}
 			</div>
-			<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+			<Card className="rounded-xl border border-[#1E2635] bg-[#1A2234] text-[#E6EEF7]">
 				<CardHeader>
 					<CardTitle className="text-base text-[#E6EEF7]">Übersicht</CardTitle>
 				</CardHeader>
@@ -69,8 +69,8 @@ export default async function EmployeesPage() {
 					) : (
 						<div className="overflow-x-auto">
 							<Table>
-								<TableHeader>
-									<TableRow>
+								<TableHeader className="border-b border-[#1E2635]">
+									<TableRow className="text-[#9BA9C1] uppercase text-xs tracking-wider">
 										<TableHead>Personalnr.</TableHead>
 										<TableHead>Name</TableHead>
 										<TableHead>E-Mail</TableHead>
@@ -81,13 +81,13 @@ export default async function EmployeesPage() {
 								</TableHeader>
 								<TableBody>
 									{employees!.map((e) => (
-										<TableRow key={e.id}>
-											<TableCell>{e.personnel_no ?? "–"}</TableCell>
-											<TableCell>{[e.first_name, e.last_name].filter(Boolean).join(" ") || "–"}</TableCell>
-											<TableCell>{e.email}</TableCell>
-											<TableCell>{e.position ?? "–"}</TableCell>
-											<TableCell>{rolesForUser(e.user_id)}</TableCell>
-											<TableCell>{new Date(e.created_at as any).toLocaleString()}</TableCell>
+										<TableRow key={e.id} className="hover:bg-[#1F2937]">
+											<TableCell className="text-[#E6EEF7]">{e.personnel_no ?? "–"}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{[e.first_name, e.last_name].filter(Boolean).join(" ") || "–"}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{e.email}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{e.position ?? "–"}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{rolesForUser(e.user_id)}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{new Date(e.created_at as any).toLocaleString()}</TableCell>
 										</TableRow>
 									))}
 								</TableBody>

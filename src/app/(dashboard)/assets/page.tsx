@@ -63,20 +63,20 @@ export default async function AssetsPage({
 
 	return (
 		<div className="flex flex-col gap-4">
-			<Card>
+			<Card className="rounded-xl border border-[#1E2635] bg-[#1A2234] text-[#E6EEF7]">
 				<CardHeader className="flex flex-row items-center justify-between">
-					<CardTitle>Assets</CardTitle>
+					<CardTitle className="text-[#E6EEF7]">Assets</CardTitle>
 					<form className="flex items-center gap-2" action="/assets" method="GET">
-						<Input name="q" placeholder="Suchen..." defaultValue={q} />
+						<Input name="q" placeholder="Suchen..." defaultValue={q} className="bg-slate-900 border-[#1E2635] text-slate-100 placeholder:text-slate-400 focus-visible:ring-[#007BFF] focus-visible:border-[#007BFF]" />
 						<input type="hidden" name="limit" value={String(limit)} />
-						<Button type="submit" variant="secondary">Suchen</Button>
+						<Button type="submit" variant="outline" className="border-[#1E2635] text-[#E6EEF7] hover:bg-[#1F2937]">Suchen</Button>
 					</form>
 				</CardHeader>
 				<CardContent>
 					<div className="overflow-x-auto">
 						<Table>
-							<TableHeader>
-								<TableRow>
+							<TableHeader className="border-b border-[#1E2635]">
+								<TableRow className="text-[#9BA9C1] uppercase text-xs tracking-wider">
 									<TableHead>Name</TableHead>
 									<TableHead>Kategorie</TableHead>
 									<TableHead>Standort</TableHead>
@@ -92,23 +92,23 @@ export default async function AssetsPage({
 										(a.props as any)?.nextInspection ??
 										null;
 									return (
-										<TableRow key={a.id}>
-											<TableCell>
+										<TableRow key={a.id} className="hover:bg-[#1F2937]">
+											<TableCell className="text-[#E6EEF7]">
 												<Link href={`/assets/${a.id}`} className="underline underline-offset-4">
 													{a.name}
 												</Link>
 											</TableCell>
-											<TableCell>{a.category ?? "-"}</TableCell>
-											<TableCell>{a.location ?? "-"}</TableCell>
-											<TableCell>{a.status}</TableCell>
-											<TableCell>{a.inventory_no}</TableCell>
-											<TableCell>{nextInspection ? String(nextInspection) : "-"}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{a.category ?? "-"}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{a.location ?? "-"}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{a.status}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{a.inventory_no}</TableCell>
+											<TableCell className="text-[#E6EEF7]">{nextInspection ? String(nextInspection) : "-"}</TableCell>
 										</TableRow>
 									);
 								})}
 								{!rows?.length ? (
 									<TableRow>
-										<TableCell colSpan={6} className="text-center text-sm text-muted-foreground">
+										<TableCell colSpan={6} className="text-center text-sm text-[#9BA9C1]">
 											Keine Einträge gefunden.
 										</TableCell>
 									</TableRow>
@@ -117,16 +117,16 @@ export default async function AssetsPage({
 						</Table>
 					</div>
 					<div className="mt-4 flex items-center justify-between">
-						<div className="text-sm text-muted-foreground">
+						<div className="text-sm text-[#9BA9C1]">
 							Seite {page} von {totalPages} — {total} Einträge
 						</div>
 						<div className="flex items-center gap-2">
-							<Button asChild variant="outline" size="sm" disabled={page <= 1}>
+							<Button asChild variant="outline" size="sm" disabled={page <= 1} className="border-[#1E2635] text-[#E6EEF7] hover:bg-[#1F2937]">
 								<Link href={`/assets?${new URLSearchParams({ q, limit: String(limit), page: String(page - 1) })}`}>
 									Zurück
 								</Link>
 							</Button>
-							<Button asChild variant="outline" size="sm" disabled={page >= totalPages}>
+							<Button asChild variant="outline" size="sm" disabled={page >= totalPages} className="border-[#1E2635] text-[#E6EEF7] hover:bg-[#1F2937]">
 								<Link href={`/assets?${new URLSearchParams({ q, limit: String(limit), page: String(page + 1) })}`}>
 									Weiter
 								</Link>

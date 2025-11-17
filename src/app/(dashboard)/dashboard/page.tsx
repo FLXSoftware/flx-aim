@@ -64,7 +64,7 @@ export default async function DashboardPage() {
 	return (
 		<div className="space-y-6">
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-				<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+				<Card className="rounded-xl border border-[#1E2635] bg-[#1A2234] text-[#E6EEF7]">
 					<CardHeader>
 						<CardTitle className="text-base text-[#E6EEF7]">Assets gesamt</CardTitle>
 					</CardHeader>
@@ -73,7 +73,7 @@ export default async function DashboardPage() {
 						<div className="text-sm text-[#9BA9C1]">Alle Assets der Organisation</div>
 					</CardContent>
 				</Card>
-				<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+				<Card className="rounded-xl border border-[#1E2635] bg-[#1A2234] text-[#E6EEF7]">
 					<CardHeader>
 						<CardTitle className="text-base text-[#E6EEF7]">Bevorstehende Prüfungen (30 Tage)</CardTitle>
 					</CardHeader>
@@ -82,7 +82,7 @@ export default async function DashboardPage() {
 						<div className="text-sm text-[#9BA9C1]">Bis {in30.toLocaleDateString()}</div>
 					</CardContent>
 				</Card>
-				<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+				<Card className="rounded-xl border border-[#1E2635] bg-[#1A2234] text-[#E6EEF7]">
 					<CardHeader>
 						<CardTitle className="text-base text-[#E6EEF7]">Überfällige Prüfungen</CardTitle>
 					</CardHeader>
@@ -93,7 +93,7 @@ export default async function DashboardPage() {
 				</Card>
 			</div>
 
-			<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+			<Card className="rounded-xl border border-[#1E2635] bg-[#1A2234] text-[#E6EEF7]">
 				<CardHeader>
 					<CardTitle className="text-base text-[#E6EEF7]">Bevorstehende Prüfungen</CardTitle>
 				</CardHeader>
@@ -103,8 +103,8 @@ export default async function DashboardPage() {
 					) : (
 						<div className="overflow-x-auto">
 							<table className="w-full text-sm">
-								<thead>
-									<tr className="text-left text-[#9BA9C1]">
+								<thead className="border-b border-[#1E2635]">
+									<tr className="text-left text-[#9BA9C1] uppercase text-xs tracking-wider">
 										<th className="py-2 pr-4 font-medium">Name</th>
 										<th className="py-2 pr-4 font-medium">Standort</th>
 										<th className="py-2 pr-4 font-medium">Nächste Prüfung</th>
@@ -112,10 +112,10 @@ export default async function DashboardPage() {
 								</thead>
 								<tbody>
 									{top5.map((a) => (
-										<tr key={a.id} className="border-t border-[#1E2635]">
-											<td className="py-2 pr-4">{a.name}</td>
-											<td className="py-2 pr-4">{a.location ?? "-"}</td>
-											<td className="py-2 pr-4">
+										<tr key={a.id} className="border-t border-[#1E2635] hover:bg-[#1F2937]">
+											<td className="py-2 pr-4 text-[#E6EEF7]">{a.name}</td>
+											<td className="py-2 pr-4 text-[#E6EEF7]">{a.location ?? "-"}</td>
+											<td className="py-2 pr-4 text-[#E6EEF7]">
 												{a.nextInspection ? a.nextInspection.toLocaleDateString() : "-"}
 											</td>
 										</tr>

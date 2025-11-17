@@ -22,10 +22,10 @@ export default async function DashboardLayout({
 				<div className="flex min-h-screen flex-1 flex-col">
 					<header className="bg-[#0A0F1A] border-b border-[#1E2635]">
 						<div className="flex items-center justify-between px-6 py-4">
-							<div className="text-lg font-semibold tracking-tight">Dashboard</div>
+							<div className="text-lg font-semibold tracking-tight text-[#E6EEF7]">Dashboard</div>
 							<div className="flex items-center gap-3">
 								<div className="text-right">
-									<div className="text-sm">{info.user.email ?? "Unbekannter Nutzer"}</div>
+									<div className="text-sm text-[#E6EEF7]">{info.user.email ?? "Unbekannter Nutzer"}</div>
 									<div className="text-xs text-[#9BA9C1]">
 										{info.org?.name ?? (info.org?.id ? `Org: ${info.org.id}` : "Keine Organisation")}
 									</div>

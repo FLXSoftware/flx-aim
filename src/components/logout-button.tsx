@@ -17,7 +17,13 @@ export function LogoutButton() {
 	}
 
 	return (
-		<Button variant="outline" size="sm" onClick={onLogout} disabled={isPending}>
+		<Button
+			variant="outline"
+			size="sm"
+			onClick={onLogout}
+			disabled={isPending}
+			className="border-[#1E2635] text-[#E6EEF7] hover:bg-[#1F2937] hover:text-[#E6EEF7]"
+		>
 			<LogOut className="mr-2 h-4 w-4" />
 			Logout
 		</Button>
