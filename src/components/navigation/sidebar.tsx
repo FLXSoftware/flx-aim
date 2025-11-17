@@ -16,7 +16,7 @@ type NavItem = {
 const navItems: NavItem[] = [
 	{ label: "Dashboard", href: "/dashboard", icon: <LayoutDashboard className="h-4 w-4" />, match: "exact" },
 	{ label: "Assets", href: "/assets", icon: <Box className="h-4 w-4" />, match: "startsWith" },
-	{ label: "Employees", href: "/employees", icon: <Users className="h-4 w-4" />, disabled: true, match: "startsWith" },
+	{ label: "Employees", href: "/employees", icon: <Users className="h-4 w-4" />, match: "startsWith" },
 ];
 
 export function Sidebar() {
