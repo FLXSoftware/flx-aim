@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { requireOrg } from "@/lib/auth";
+import { getCurrentUserWithOrg } from "@/lib/auth";
 import { LogoutButton } from "@/components/logout-button";
 import { Sidebar } from "@/components/navigation/sidebar";
 
@@ -8,8 +8,8 @@ export default async function DashboardLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const info = await requireOrg();
-	if (!info) {
+	const info = await getCurrentUserWithOrg();
+	if (!info?.userId) {
 		redirect("/login");
 	}
 

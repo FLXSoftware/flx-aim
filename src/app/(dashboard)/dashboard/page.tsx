@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { requireOrg } from "@/lib/auth";
+import { getCurrentUserWithOrg } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function parseNextInspection(props: any): Date | null {
@@ -11,7 +11,26 @@ function parseNextInspection(props: any): Date | null {
 }
 
 export default async function DashboardPage() {
-	const { orgId } = await requireOrg();
+	const info = await getCurrentUserWithOrg();
+	// Layout schützt bereits vor nicht eingeloggten Nutzern.
+	const orgId = info?.orgId ?? null;
+
+	if (!orgId) {
+		return (
+			<div className="space-y-6">
+				<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+					<CardHeader>
+						<CardTitle className="text-base text-[#E6EEF7]">Kein Organisationskontext</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p className="text-sm text-[#9BA9C1]">
+							Dein Benutzer ist derzeit keiner Organisation zugeordnet.
+						</p>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
 	const supabase = await createSupabaseServerClient();
 
 	// Gesamtanzahl der Assets

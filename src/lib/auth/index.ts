@@ -69,10 +69,8 @@ export async function requireOrg() {
 	if (!info?.userId) {
 		redirect("/login");
 	}
-	if (!info.orgId) {
-		// Kein gültiger Org-Kontext -> zurück zum Login (oder Org-Auswahl in Zukunft)
-		redirect("/login");
-	}
+	// WICHTIG: Kein Redirect mehr bei fehlender orgId, um Loops zu vermeiden.
+	// Org-Handling erfolgt seiten-/layout-spezifisch (z. B. Hinweis-Seite).
 	return info;
 }
 
