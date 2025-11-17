@@ -13,7 +13,7 @@ function parseNextInspection(props: any): Date | null {
 export default async function DashboardPage() {
 	const info = await getCurrentUserWithOrg();
 	// Layout schützt bereits vor nicht eingeloggten Nutzern.
-	const orgId = info?.orgId ?? null;
+	const orgId = info?.org?.id ?? null;
 
 	if (!orgId) {
 		return (
@@ -23,9 +23,7 @@ export default async function DashboardPage() {
 						<CardTitle className="text-base text-[#E6EEF7]">Kein Organisationskontext</CardTitle>
 					</CardHeader>
 					<CardContent>
-						<p className="text-sm text-[#9BA9C1]">
-							Dein Benutzer ist derzeit keiner Organisation zugeordnet.
-						</p>
+						<p className="text-sm text-[#9BA9C1]">Dein Benutzer ist derzeit keiner Organisation zugeordnet.</p>
 					</CardContent>
 				</Card>
 			</div>

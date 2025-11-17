@@ -3,7 +3,7 @@ import { getCurrentUserWithOrg } from "@/lib/auth";
 
 export default async function RootPage() {
 	const info = await getCurrentUserWithOrg();
-	if (!info?.userId) {
+	if (!info?.user) {
 		redirect("/login");
 	}
 	redirect("/dashboard");

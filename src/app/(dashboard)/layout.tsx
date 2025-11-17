@@ -9,7 +9,7 @@ export default async function DashboardLayout({
 	children: React.ReactNode;
 }) {
 	const info = await getCurrentUserWithOrg();
-	if (!info?.userId) {
+	if (!info?.user) {
 		redirect("/login");
 	}
 
@@ -25,9 +25,9 @@ export default async function DashboardLayout({
 							<div className="text-lg font-semibold tracking-tight">Dashboard</div>
 							<div className="flex items-center gap-3">
 								<div className="text-right">
-									<div className="text-sm">{info.email ?? "Unbekannter Nutzer"}</div>
+									<div className="text-sm">{info.user.email ?? "Unbekannter Nutzer"}</div>
 									<div className="text-xs text-[#9BA9C1]">
-										{info.orgName ?? (info.orgId ? `Org: ${info.orgId}` : "Keine Organisation")}
+										{info.org?.name ?? (info.org?.id ? `Org: ${info.org.id}` : "Keine Organisation")}
 									</div>
 								</div>
 								<LogoutButton />

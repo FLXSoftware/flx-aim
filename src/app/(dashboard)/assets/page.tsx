@@ -17,7 +17,23 @@ export default async function AssetsPage({
 }: {
 	searchParams: SearchParams;
 }) {
-	const { orgId } = await requireOrg();
+	const info = await requireOrg();
+	const orgId = info.org?.id;
+	if (!orgId) {
+		// Ohne gültige Organisation keine Abfrage möglich
+		return (
+			<div className="flex flex-col gap-4">
+				<Card>
+					<CardHeader>
+						<CardTitle>Assets</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p className="text-sm text-[#9BA9C1]">Kein Organisationskontext vorhanden.</p>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
 	const supabase = await createSupabaseServerClient();
 
 	const page = Math.max(parseInt(searchParams.page ?? "1", 10) || 1, 1);

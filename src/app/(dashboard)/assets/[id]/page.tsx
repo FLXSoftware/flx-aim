@@ -8,7 +8,11 @@ export default async function AssetDetailPage({
 }: {
 	params: { id: string };
 }) {
-	const { orgId } = await requireOrg();
+	const info = await requireOrg();
+	const orgId = info.org?.id;
+	if (!orgId) {
+		notFound();
+	}
 	const supabase = await createSupabaseServerClient();
 
 	const { data: asset } = await supabase
