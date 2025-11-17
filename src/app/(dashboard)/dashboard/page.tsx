@@ -1,16 +1,112 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireOrg } from "@/lib/auth";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export default function DashboardPage() {
+function parseNextInspection(props: any): Date | null {
+	if (!props) return null;
+	const iso = props.next_inspection_at ?? props.nextInspection ?? null;
+	if (!iso) return null;
+	const d = new Date(iso);
+	return isNaN(d.getTime()) ? null : d;
+}
+
+export default async function DashboardPage() {
+	const { orgId } = await requireOrg();
+	const supabase = await createSupabaseServerClient();
+
+	// Gesamtanzahl der Assets
+	const totalAssetsRes = await supabase
+		.from("assets")
+		.select("id", { count: "exact", head: true })
+		.eq("org_id", orgId);
+	const totalAssets = totalAssetsRes.count ?? 0;
+
+	// Für KPI-Berechnung und Top-5 Liste: begrenzte Menge laden und clientseitig berechnen
+	const { data: assetRows } = await supabase
+		.from("assets")
+		.select("id, name, location, props")
+		.eq("org_id", orgId)
+		.order("created_at", { ascending: false })
+		.limit(200);
+
+	const now = new Date();
+	const in30 = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+	const upcoming = (assetRows ?? [])
+		.map((a) => ({ ...a, nextInspection: parseNextInspection(a.props as any) }))
+		.filter((a) => a.nextInspection && a.nextInspection >= now && a.nextInspection <= in30)
+		.sort((a, b) => (a.nextInspection!.getTime() - b.nextInspection!.getTime()));
+
+	const overdue = (assetRows ?? [])
+		.map((a) => ({ ...a, nextInspection: parseNextInspection(a.props as any) }))
+		.filter((a) => a.nextInspection && a.nextInspection < now)
+		.sort((a, b) => (a.nextInspection!.getTime() - b.nextInspection!.getTime()));
+
+	const top5 = upcoming.slice(0, 5);
+
 	return (
-		<div className="p-2">
-			<Card>
+		<div className="space-y-6">
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+				<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+					<CardHeader>
+						<CardTitle className="text-base text-[#E6EEF7]">Assets gesamt</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<div className="text-3xl font-semibold">{totalAssets}</div>
+						<div className="text-sm text-[#9BA9C1]">Alle Assets der Organisation</div>
+					</CardContent>
+				</Card>
+				<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+					<CardHeader>
+						<CardTitle className="text-base text-[#E6EEF7]">Bevorstehende Prüfungen (30 Tage)</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<div className="text-3xl font-semibold">{upcoming.length}</div>
+						<div className="text-sm text-[#9BA9C1]">Bis {in30.toLocaleDateString()}</div>
+					</CardContent>
+				</Card>
+				<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
+					<CardHeader>
+						<CardTitle className="text-base text-[#E6EEF7]">Überfällige Prüfungen</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<div className="text-3xl font-semibold">{overdue.length}</div>
+						<div className="text-sm text-[#9BA9C1]">Stand heute</div>
+					</CardContent>
+				</Card>
+			</div>
+
+			<Card className="rounded-xl border border-[#1E2635] bg-slate-900/80">
 				<CardHeader>
-					<CardTitle>Dashboard</CardTitle>
+					<CardTitle className="text-base text-[#E6EEF7]">Bevorstehende Prüfungen</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<p className="text-sm text-muted-foreground">
-						Grundgerüst ist bereit. Inhalte folgen.
-					</p>
+					{top5.length === 0 ? (
+						<p className="text-sm text-[#9BA9C1]">Aktuell stehen keine Prüfungen an.</p>
+					) : (
+						<div className="overflow-x-auto">
+							<table className="w-full text-sm">
+								<thead>
+									<tr className="text-left text-[#9BA9C1]">
+										<th className="py-2 pr-4 font-medium">Name</th>
+										<th className="py-2 pr-4 font-medium">Standort</th>
+										<th className="py-2 pr-4 font-medium">Nächste Prüfung</th>
+									</tr>
+								</thead>
+								<tbody>
+									{top5.map((a) => (
+										<tr key={a.id} className="border-t border-[#1E2635]">
+											<td className="py-2 pr-4">{a.name}</td>
+											<td className="py-2 pr-4">{a.location ?? "-"}</td>
+											<td className="py-2 pr-4">
+												{a.nextInspection ? a.nextInspection.toLocaleDateString() : "-"}
+											</td>
+										</tr>
+									))}
+								</tbody>
+							</table>
+						</div>
+					)}
 				</CardContent>
 			</Card>
 		</div>

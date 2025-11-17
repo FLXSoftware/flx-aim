@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireOrg } from "@/lib/auth";
 import { LogoutButton } from "@/components/logout-button";
+import { Sidebar } from "@/components/navigation/sidebar";
 
 export default async function DashboardLayout({
 	children,
@@ -13,29 +14,33 @@ export default async function DashboardLayout({
 	}
 
 	return (
-		<div className="min-h-dvh flex flex-col">
-			<header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
-				<div className="mx-auto flex w-full max-w-6xl items-center justify-between p-4">
-					<div className="flex items-center gap-2">
-						<div className="font-semibold">FLX</div>
-						<div className="text-sm text-muted-foreground">Dashboard</div>
-					</div>
-					<div className="flex items-center gap-3">
-						<div className="text-sm">
-							<div className="font-medium">
-								{info.email ?? "Unbekannter Nutzer"}
-							</div>
-							<div className="text-muted-foreground">
-								{info.orgName ?? (info.orgId ? `Org: ${info.orgId}` : "Keine Organisation")}
+		<div className="min-h-screen w-full bg-[#0F172A] text-[#E6EEF7]">
+			<div className="flex">
+				<aside className="w-64 shrink-0 bg-[#0A0F1A] border-r border-[#1E2635]">
+					<Sidebar />
+				</aside>
+				<div className="flex min-h-screen flex-1 flex-col">
+					<header className="bg-[#0A0F1A] border-b border-[#1E2635]">
+						<div className="flex items-center justify-between px-6 py-4">
+							<div className="text-lg font-semibold tracking-tight">Dashboard</div>
+							<div className="flex items-center gap-3">
+								<div className="text-right">
+									<div className="text-sm">{info.email ?? "Unbekannter Nutzer"}</div>
+									<div className="text-xs text-[#9BA9C1]">
+										{info.orgName ?? (info.orgId ? `Org: ${info.orgId}` : "Keine Organisation")}
+									</div>
+								</div>
+								<LogoutButton />
 							</div>
 						</div>
-						<LogoutButton />
-					</div>
+					</header>
+					<main className="flex-1">
+						<div className="mx-auto max-w-6xl p-6 space-y-6">
+							{children}
+						</div>
+					</main>
 				</div>
-			</header>
-			<main className="mx-auto w-full max-w-6xl flex-1 p-4">
-				{children}
-			</main>
+			</div>
 		</div>
 	);
 }
