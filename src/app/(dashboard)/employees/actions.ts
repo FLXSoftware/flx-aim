@@ -1,22 +1,12 @@
 "use server";
 
-import { z } from "zod";
 import { requireOrg } from "@/lib/auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-
-export const InviteEmployeeSchema = z.object({
-	email: z.string().email(),
-	first_name: z.string().optional(),
-	last_name: z.string().optional(),
-	position: z.string().optional(),
-	role: z.enum(["admin", "user"]),
-});
-
-export type InviteEmployeeInput = z.infer<typeof InviteEmployeeSchema>;
+import { inviteEmployeeSchema, type InviteEmployeeInput } from "@/lib/validation/employees";
 
 export async function inviteEmployeeAction(input: InviteEmployeeInput) {
-	const parsed = InviteEmployeeSchema.safeParse(input);
+	const parsed = inviteEmployeeSchema.safeParse(input);
 	if (!parsed.success) {
 		throw new Error("Ungültige Eingaben.");
 	}

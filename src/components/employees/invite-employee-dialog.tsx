@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -17,16 +16,17 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { inviteEmployeeAction, InviteEmployeeSchema } from "@/app/(dashboard)/employees/actions";
+import { inviteEmployeeAction } from "@/app/(dashboard)/employees/actions";
+import { inviteEmployeeSchema, type InviteEmployeeInput } from "@/lib/validation/employees";
 import { toast } from "sonner";
 
-type InviteValues = z.infer<typeof InviteEmployeeSchema>;
+type InviteValues = InviteEmployeeInput;
 
 export function InviteEmployeeDialog() {
 	const [open, setOpen] = useState(false);
 	const router = useRouter();
 	const form = useForm<InviteValues>({
-		resolver: zodResolver(InviteEmployeeSchema),
+		resolver: zodResolver(inviteEmployeeSchema),
 		defaultValues: { email: "", first_name: "", last_name: "", position: "", role: "user" },
 	});
 
